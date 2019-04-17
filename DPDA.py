@@ -23,28 +23,22 @@ config = dict.fromkeys(['Q', 'Sigma', 'Gamma', 'Delta', 'S', 'I', 'F'], None)
 def dpda_simulator():
     my_input = input()
 
-    global rows
-    for i in config['Delta']:
-        if (config['Delta'][i] == '\n'):
-            rows += 1
-
-    for i in range(rows):
-        transitionRow['curState']
-        transitions[i] = transitionRow
+    global stackContents
+    global curState
 
     for x in my_input:
         if (not my_input[x] in config['Sigma']):
             print('Error')
             break
-        if (x == 0):
-            currentState = [my_input[x], my_input[x+1], config['I'], config['S']]
-            transition(currentState)
         else:
-            currentState = [my_input[x], my_input[x+1], ]
+            if (x == 0):
+                currentState = [my_input[x], my_input[x+1], config['I'], config['S']]
+                transition(currentState)
+            else:
+                currentState = [my_input[x], my_input[x+1], stackContents, curState]
 
 def transition(currentState):
-
-
+    
 
 def setup_config(config_location):
     global config
