@@ -23,9 +23,28 @@ config = dict.fromkeys(['Q', 'Sigma', 'Gamma', 'Delta', 'S', 'I', 'F'], None)
 def dpda_simulator():
     my_input = input()
 
+    global rows
+    for i in config['Delta']:
+        if (config['Delta'][i] == '\n'):
+            rows += 1
+
+    for i in range(rows):
+        transitionRow['curState']
+        transitions[i] = transitionRow
+
     for x in my_input:
         if (not my_input[x] in config['Sigma']):
             print('Error')
+            break
+        if (x == 0):
+            currentState = [my_input[x], my_input[x+1], config['I'], config['S']]
+            transition(currentState)
+        else:
+            currentState = [my_input[x], my_input[x+1], ]
+
+def transition(currentState):
+
+
 
 def setup_config(config_location):
     global config
@@ -44,6 +63,13 @@ def setup_config(config_location):
 
     with open(f'{config_location}F.conf') as f:
         config['F'] = f.read()
+
+    config['I'] = config['Gamma'][0]
+
+    config['S'] = config['Delta'][0]
+
+    for x in config:
+        print(config[x])
 
     dpda_simulator()
 
