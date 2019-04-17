@@ -25,22 +25,23 @@ curState = None
 def dpda_simulator():
     my_input = input()
 
-    global stackContents
-    global curState
+    global stackContents = config['I']
+    global curState = config['S']
 
     for x in range(0, len(my_input) - 1):
         if (not my_input[x] in config['Sigma']):
+            print(config['Sigma'])
             print('Error input is not in alphabet') # Invalid alphabet character
             break
         else:
             if (x == 0):
                 currentState = [my_input[x], config['I'], config['S']]
-                if (!transition(currentState)):
+                if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
             else:
                 currentState = [my_input[x], stackContents, curState]
-                if (!transition(currentState)):
+                if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
         if (x == len(my_input) - 1):
@@ -53,15 +54,15 @@ def transition(currentState):
     foundTransition = False
 
     for x in range(0, len(config['Delta'])):
-        if (config['Delta'][x][2] == cc && config['Delta'][x][4] == ts && config['Delta'][0] == cs):
+        if (config['Delta'][x][2] == cc and config['Delta'][x][4] == ts and config['Delta'][0] == cs):
             stackContents = currentState[1] + config['Delta'][x][8:]
             curState = config['Delta'][x][6]
             foundTransition = True
             return True
 
-    if (!foundTransition):
+    if (not foundTransition):
         for x in range(0, len(config['Delta'])):
-            if (config['Delta'][x][0] == 'L' && config['Delta'][x][2] == cc && config['Delta'][x][4] == ts):
+            if (config['Delta'][x][0] == 'L' and config['Delta'][x][2] == cc and config['Delta'][x][4] == ts):
                 stackContents = currentState[1] + config['Delta'][x][8:]
                 curState = config['Delta'][x][6]
                 return True
