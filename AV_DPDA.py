@@ -45,13 +45,22 @@
 import sys      # Used to take advantage of stdin and stdout
 import time     # Used to step through program slower
 
-# Configuration Variables
+# Global Variables
 config = dict.fromkeys(['Q', 'Sigma', 'Gamma', 'Delta', 'S', 'I', 'F'], None)   # utilized to hold configuration file contents
 stackContents = None                                                            # utilized to pass stack contents through various methods
 curState = None                                                                 # utilized to pass state contents through various methods
 
-def dpda_simulator():   # simulator method utilizes conf files and input to simulate dpda
-    my_input = input()  # pull input from stdin
+def dpda_simulator():
+
+    '''
+        This method simulates the DPDA over the specified input string. The method
+        utilizes the conf files specified when the program is run to determine if
+        the user specified input string is accepted or rejected based on the rules
+        of a standard DPDA. For the definition and function of a DPDA please see:
+        https://en.wikipedia.org/wiki/Deterministic_pushdown_automaton
+    '''
+
+    my_input = input('Enter String: ')  # pull input from stdin
 
     global stackContents
     global curState
@@ -71,7 +80,7 @@ def dpda_simulator():   # simulator method utilizes conf files and input to simu
                 if ((x + 1) == len(my_input) and curState in config['F']):
                     print('\nString Accepted\n')
                     break
-                if (x + 1 >= len(my_input)): #need lambda transition
+                if (x + 1 >= len(my_input)): # need lambda transition
                     if (stackContents == ''):
                         stackContents = str(0)
                     currentState = [None, stackContents, curState]
@@ -91,6 +100,15 @@ def dpda_simulator():   # simulator method utilizes conf files and input to simu
         time.sleep(1)
 
 def transition(currentState):
+
+    '''
+        This method is called by the simulate method to determine which transition
+        is to be made based on the current character, stack, and state. The simulate
+        method then passes through a tuple with three parameters through which this
+        method begins to work. Based on the input from the tuple and the transition
+        function the method retuns the new state and stack to the simulator.
+    '''
+
     cs = currentState[2]
     cc = currentState[0]
     ts = currentState[1][0]
@@ -127,6 +145,13 @@ def transition(currentState):
                 return True
 
 def setup_config(config_location):
+
+    '''
+        This method utilizes the path to the configuration files to load the data
+        from the aforementioned configuration files into the config array. Once the
+        files have been loaded this method begins the simulator.
+    '''
+
     global config
 
     with open(f'{config_location}Q.conf') as f:
@@ -151,6 +176,14 @@ def setup_config(config_location):
     dpda_simulator()
 
 def main(argv):
+
+    '''
+        The main method calls the setup_config method to begin importing the data
+        in the configuration files. This method also cleans the input file location
+        ensuring the user has ended the string on a / and also ensuring that the
+        usage is displayed if an incorrect number of arguments is present.
+    '''
+
     if (len(sys.argv) < 2):
         usage_string = f'usage: python {argv[0]} /location/of/configuration/files/'
         print(usage_string)
