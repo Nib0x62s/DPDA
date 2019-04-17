@@ -34,25 +34,32 @@ def dpda_simulator():
             break
         else:
             if (x == 0):
-                currentState = [my_input[x], config['I'], config['S']]
+                currentState = [my_input[x+1], config['I'], config['S']]
                 print(currentState)
                 if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
             else:
-                currentState = [my_input[x], stackContents, curState]
+                #print(x, len(my_input))
+                if (x + 1 >= len(my_input)): #need lambda transition
+                    currentState = [None, stackContents, curState]
+                else:
+                    currentState = [my_input[x+1], stackContents, curState]
                 print(currentState)
                 if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
-        if (x == len(my_input)):
-            print('String accepted')
+
+        print(x, curState)
+
+        if ((x + 1) == len(my_input) and curState in config['F']):
+            print('String Accepted')
             break
 
 def transition(currentState):
     cs = currentState[2]
     cc = currentState[0]
-    ts = currentState[1][len(currentState[1]) - 1]
+    ts = currentState[1][0]
     foundTransition = False
     global stackContents
     global curState
@@ -63,21 +70,30 @@ def transition(currentState):
         #print('\n\n', config['Delta'][x][0], config['Delta'][x][2], config['Delta'][x][4])
         if (config['Delta'][x][2] == cc and config['Delta'][x][4] == ts and config['Delta'][x][0] == cs):
             print('found match')
-            stackContents = currentState[1] + config['Delta'][x][8:].rstrip()
+            if (config['Delta'][x][8:].rstrip() == ''):
+                stackContents = stackContents[1:]
+            else:
+                if (not stackContents == None):
+                    stackContents = config['Delta'][x][8:].rstrip() + stackContents
+                else:
+                    stackContents = config['Delta'][x][8:].rstrip()
             curState = config['Delta'][x][6]
             foundTransition = True
             return True
             break
-        print('still in for loop')
+        #print('still in for loop')
 
+    #print (foundTransition)
     if (not foundTransition):
+        #print('enter second loop')
         for x in range(0, len(config['Delta'])):
-            if (config['Delta'][x][0] == 'L' and config['Delta'][x][2] == cc and config['Delta'][x][4] == ts):
+            #print('L', cs, ts)
+            #print(config['Delta'][x][0], config['Delta'][x][2], config['Delta'][x][4])
+            if (config['Delta'][x][0] == 'L' and config['Delta'][x][2] == cs and config['Delta'][x][4] == ts):
                 stackContents = currentState[1] + config['Delta'][x][8:]
                 curState = config['Delta'][x][6]
                 return True
-            else:
-                return False
+            #print('in second for loop')
 
 
 
