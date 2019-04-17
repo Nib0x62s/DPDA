@@ -25,40 +25,50 @@ curState = None
 def dpda_simulator():
     my_input = input()
 
-    global stackContents = config['I']
-    global curState = config['S']
+    global stackContents
+    global curState
 
-    for x in range(0, len(my_input) - 1):
+    for x in range(0, len(my_input)):
         if (not my_input[x] in config['Sigma']):
-            print(config['Sigma'])
             print('Error input is not in alphabet') # Invalid alphabet character
             break
         else:
             if (x == 0):
                 currentState = [my_input[x], config['I'], config['S']]
+                print(currentState)
                 if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
             else:
                 currentState = [my_input[x], stackContents, curState]
+                print(currentState)
                 if (not transition(currentState)):
                     print('Error no more transitions available')
                     break
-        if (x == len(my_input) - 1):
-            print('String is accepted')
+        if (x == len(my_input)):
+            print('String accepted')
+            break
 
 def transition(currentState):
     cs = currentState[2]
     cc = currentState[0]
-    ts = currentState[1][len(stackContents) - 1]
+    ts = currentState[1][len(currentState[1]) - 1]
     foundTransition = False
+    global stackContents
+    global curState
+
+    print(cc, ts, cs)
 
     for x in range(0, len(config['Delta'])):
-        if (config['Delta'][x][2] == cc and config['Delta'][x][4] == ts and config['Delta'][0] == cs):
-            stackContents = currentState[1] + config['Delta'][x][8:]
+        #print('\n\n', config['Delta'][x][0], config['Delta'][x][2], config['Delta'][x][4])
+        if (config['Delta'][x][2] == cc and config['Delta'][x][4] == ts and config['Delta'][x][0] == cs):
+            print('found match')
+            stackContents = currentState[1] + config['Delta'][x][8:].rstrip()
             curState = config['Delta'][x][6]
             foundTransition = True
             return True
+            break
+        print('still in for loop')
 
     if (not foundTransition):
         for x in range(0, len(config['Delta'])):
@@ -68,6 +78,7 @@ def transition(currentState):
                 return True
             else:
                 return False
+
 
 
 
@@ -83,7 +94,7 @@ def setup_config(config_location):
     with open(f'{config_location}Gamma.conf') as f:
         config['Gamma'] = f.readline()
 
-    with open(f'{config_location}Delta.conf') as f:
+    with open(f'{config_location}delta.conf') as f:
         config['Delta'] = f.readlines()
 
     with open(f'{config_location}F.conf') as f:
@@ -91,10 +102,10 @@ def setup_config(config_location):
 
     config['I'] = config['Gamma'][0]
 
-    config['S'] = config['Q']
+    config['S'] = config['Delta'][0][0]
 
-    for x in config:
-        print(config[x])
+    #for x in config:
+    #    print(config[x])
 
     dpda_simulator()
 
