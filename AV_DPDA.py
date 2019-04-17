@@ -12,29 +12,29 @@
                         input string is Accepted or Rejected based on the other files.
 
     DPDA File Configuration Description:
-            * Q.conf        Largest integer index for elements in set Q
+            - Q.conf        Largest integer index for elements in set Q
                             one integer corresponding to the largest state
                             possible
-            * Sigma.conf    A finite input alphabet (all unicode)
+            - Sigma.conf    A finite input alphabet (all unicode)
                             letters should not be seperated at all
-            * Gamma.conf    A finite stack alphabet (all unicode).
+            - Gamma.conf    A finite stack alphabet (all unicode).
                             letters/numbers sould not be seperated
                             at all
-            * Delta.conf    The transition functions.
+            - Delta.conf    The transition functions.
                             each function should be on a newline
                             each state and instantaneous description should
                             be seperated by a space
-            * F.conf        The set of possible final states
+            - F.conf        The set of possible final states
                             seperated by commas
 
     DPDA Septuple Description: (Q, Sigma, Gamma, Delta, S, I, F)
-            * Q         Largest integer index for elements in set Q.
-            * Sigma     A finite input alphabet (all unicode).
-            * Gamma     A finite stack alphabet (all unicode).
-            * Delta     The transition functions.
-            * S         The initial start state.
-            * I         The initial stack contents.
-            * F         The set of possible final states.
+            - Q         Largest integer index for elements in set Q.
+            - Sigma     A finite input alphabet (all unicode).
+            - Gamma     A finite stack alphabet (all unicode).
+            - Delta     The transition functions.
+            - S         The initial start state.
+            - I         The initial stack contents.
+            - F         The set of possible final states.
 
     Original project description: https://github.com/csc220-mountunion/CSC450assignment
 
@@ -185,7 +185,15 @@ def main(argv):
     '''
 
     if (len(sys.argv) < 2):
-        usage_string = f'usage: python {argv[0]} /location/of/configuration/files/'
+        adrian_string ='''              _      _              __      __
+     /\      | |    (_)             \ \    / /
+    /  \   __| |_ __ _  __ _ _ __    \ \  / /_ _ ___ _   _
+   / /\ \ / _` | '__| |/ _` | '_ \    \ \/ / _` / __| | | |
+  / ____ \ (_| | |  | | (_| | | | |    \  / (_| \__ \ |_| |
+ /_/    \_\__,_|_|  |_|\__,_|_| |_|     \/ \__,_|___/\__,_|
+ '''
+        usage_string = f'usage: python {argv[0]} /path to conf files/'
+        print(adrian_string)
         print(usage_string)
     else:
         if (not argv[1][len(argv[1])-1] == '/'):
